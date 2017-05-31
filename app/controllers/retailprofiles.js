@@ -2,7 +2,7 @@
 
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
-const RetailProfile = models.retailprofile;
+const RetailProfile = models.Retailprofile;
 
 const authenticate = require('./concerns/authenticate');
 const setUser = require('./concerns/set-current-user');
@@ -59,6 +59,6 @@ module.exports = controller({
 }, { before: [
   { method: setUser, only: ['index', 'show'] },
   { method: authenticate, except: ['index', 'show'] },
-  { method: setModel(Retailprofile), only: ['show'] },
-  { method: setModel(Retailprofile, { forUser: true }), only: ['update', 'destroy'] },
+  { method: setModel(RetailProfile), only: ['show'] },
+  { method: setModel(RetailProfile, { forUser: true }), only: ['update', 'destroy'] },
 ], });
