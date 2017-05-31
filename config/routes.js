@@ -17,5 +17,8 @@ module.exports = require('lib/wiring/routes')
 .patch('/change-password/:id', 'users#changepw')
 .resources('users', { only: ['index', 'show'] })
 
+// Add resource for retail-profile
+.resources('retailprofile')
+
 // all routes created
 ;
