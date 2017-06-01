@@ -2,7 +2,7 @@
 
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
-const RetailProfile = models.Retailprofile;
+const RetailProfile = models.retailprofile;
 
 const authenticate = require('./concerns/authenticate');
 const setUser = require('./concerns/set-current-user');
@@ -10,7 +10,7 @@ const setModel = require('./concerns/set-mongoose-model');
 
 const index = (req, res, next) => {
   // Modified params on .find() to limit records to those owned by current user.
-  RetailProfile.find({owner: req.user.id})
+  RetailProfile.find({_owner: req.user._id})
     .then(retailprofiles => res.json({
       retailprofiles: retailprofiles.map((e) =>
         e.toJSON({ virtuals: true, user: req.user })),
@@ -28,7 +28,7 @@ const create = (req, res, next) => {
   let retailprofile = Object.assign(req.body.retailprofile, {
     _owner: req.user._id,
   });
-  Retailprofile.create(retailprofile)
+  RetailProfile.create(retailprofile)
     .then(retailprofile =>
       res.status(201)
         .json({
@@ -59,6 +59,7 @@ module.exports = controller({
 }, { before: [
   { method: setUser, only: ['index', 'show'] },
   { method: authenticate, except: ['index', 'show'] },
-  { method: setModel(RetailProfile), only: ['show'] },
-  { method: setModel(RetailProfile, { forUser: true }), only: ['update', 'destroy'] },
+  // { method: setModel(RetailProfile), only: ['show'] },
+  // Added 'show' to below method to ensure a user can only search their own retailprofiles.
+  { method: setModel(RetailProfile, { forUser: true }), only: ['show', 'update', 'destroy'] },
 ], });

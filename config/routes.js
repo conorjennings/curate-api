@@ -18,7 +18,7 @@ module.exports = require('lib/wiring/routes')
 .resources('users', { only: ['index', 'show'] })
 
 // Add resource for retail-profile
-.resources('retailprofile')
+.resources('retailprofiles')
 
 // all routes created
 ;

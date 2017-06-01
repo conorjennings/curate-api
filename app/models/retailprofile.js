@@ -54,10 +54,6 @@ const retailprofileSchema = new mongoose.Schema({
   },
 });
 
-retailprofileSchema.virtual('length').get(function length() {
-  return this.text.length;
-});
-
 const Retailprofile = mongoose.model('Retailprofile', retailprofileSchema);
 
 module.exports = Retailprofile;
