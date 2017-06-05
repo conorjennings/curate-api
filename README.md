@@ -4,6 +4,11 @@
 
 ## API
 
+### Entity Relationship Diagram
+
+A copy of the ERD can be found [here](img/ERD.JPG).<br>
+
+
 Use this as the basis for your own API documentation. Add a new third-level
 heading for your custom entities, and follow the pattern provided for the
 built-in user authentication documentation.
