@@ -8,12 +8,6 @@ const express = require('express');
 
 const app = express();
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "https://fast-ocean-99929.herokuapp.com/");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
-
 const middleware = require('app/middleware');
 
 app.set('root', __dirname);
