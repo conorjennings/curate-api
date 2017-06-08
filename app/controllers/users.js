@@ -94,12 +94,12 @@ const changepw = (req, res, next) => {
   debug('Changing password');
   User.findOne({
     _id: req.params.id,
-    token: req.params.token,
+    token: req.user.token
   }).then(user =>
-    user ? user.comparePassword(req.body.passwords.oldPw) :
+    user ? user.comparePassword(req.body.passwords.old) :
       Promise.reject(new HttpError(404))
   ).then(user => {
-    user.password = req.body.passwords.newPw;
+    user.password = req.body.passwords.new;
     return user.save();
   }).then((/* user */) =>
     res.sendStatus(204)
