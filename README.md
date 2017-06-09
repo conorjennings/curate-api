@@ -2,19 +2,17 @@
 
 # curate-api
 
-## API
+Find the repo for the curate. front end client [here](https://github.com/danielleletarte/curate-client).
+
+Find the deployed curate. front end client [here](https://fast-ocean-99929.herokuapp.com).
 
 ### Entity Relationship Diagram
 
 A copy of the ERD can be found [here](img/ERD.JPG).<br>
 
+## API
 
-Use this as the basis for your own API documentation. Add a new third-level
-heading for your custom entities, and follow the pattern provided for the
-built-in user authentication documentation.
-
-Scripts are included in [`scripts`](scripts) to test built-in actions. Add your
-own scripts to test your custom API.
+This API helps users with an interest in vegan and sustainable fashion manage keep track of their favorite sources. A user can create create retail profiles, track whether the retailer independent and whether they follow vegan, slow, or sustainable practices. A user can also track any important notes they want to remember about the retailer.
 
 ### Authentication
 
@@ -35,8 +33,7 @@ curl --include --request POST http://localhost:4741/sign-up \
   --data '{
     "credentials": {
       "email": "an@example.email",
-      "password": "an example password",
-      "password_confirmation": "an example password"
+      "password": "an example password"
     }
   }'
 ```
@@ -203,6 +200,230 @@ Content-Type: application/json; charset=utf-8
     "email": "another@example.email"
   }
 }
+```
+
+### User Actions
+
+#### index /retailprofiles
+
+The index action is a GET that retrieves all the retail profiles associated with a user. The response body will contain JSON containing an array of retail profiles, e.g.:
+
+
+
+Request:
+
+```sh
+API="http://localhost:4741"
+URL_PATH="/retailprofiles"
+
+curl "${API}${URL_PATH}" \
+  --include \
+  --request GET \
+  --header "Authorization: Token token=${TOKEN}" \
+```
+
+```sh
+TOKEN="aqPhrVctPxX+kg21ColVUMoNYxfIhA79zVJQq5ZqCsE=--1Mw119XiPrAMD9dpArKrcXJqGMlcy6g5uBraKNtFf5s="
+```
+
+Response:
+
+```md
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+
+{
+  "retailprofiles": [
+  {
+    "id": 1,
+    "name": "this is a test",
+    "siteUrl": "www.test.com",
+    "notes": "cool shop",
+    "vegan": true,
+    "slow:" false,
+    "sustainable": true,
+    "independent": true
+  }
+  {
+    "id": 2,
+    "name": "this is a test",
+    "siteUrl": "www.test.com",
+    "notes": "cool shop",
+    "vegan": true,
+    "slow:" false,
+    "sustainable": true,
+    "independent": true
+  }
+ ]
+}
+```
+#### show /retailprofiles/:id
+
+The show action is a GET specifing the id of the retail profile to retrieve. If the request is successful the status will be 200, OK, and the response body will contain JSON for the idea requested.
+
+Request:
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/retailprofiles/$ID"
+curl "${API}${URL_PATH}" \
+  --include \
+  --request GET \
+  --header "Authorization: Token token=$TOKEN" \
+  --header "Content-Type: application/json"
+```
+
+```sh
+ID=2 TOKEN=BAhJIiVlODkyNTczNzYzYmVkN2RmOWNlYWM1MjAyZDhmMDI2NgY6BkVG--23303c36d71984539b1c7c76dd96acaeb37c437c
+```
+
+Response:
+
+```md
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+
+{
+  "retailprofile": {
+    "id": 2,
+    "name": "this is a test",
+    "siteUrl": "www.test.com",
+    "notes": "cool shop",
+    "vegan": true,
+    "slow:" false,
+    "sustainable": true,
+    "independent": true
+  }
+}
+```
+#### create /retailprofiles
+
+The create action expects a POST with an empty body (e.g '' or '{}' if JSON). If the request is successful, the response will have an HTTP Status of 201 Created, and the body will contain JSON of the created retail profile set to the associated user.
+
+Request:
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/retailprofiles"
+curl "${API}${URL_PATH}" \
+  --include \
+  --request POST \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=$TOKEN" \
+  --data '{
+    "retailprofile": {
+      "name": "'"${NAME}"'",
+      "siteUrl": "'"${URL}"'",
+      "vegan": "'"${VEGAN}"'",
+      "sustainable": "'"${SUSTAINABLE}"'",
+      "slow": "'"${SLOW}"'",
+      "independent": "'"${INDEPENDENT}"'",
+      "notes": "'"${NOTES}"'"
+    }
+  }'
+```
+
+```sh
+TOKEN="dz6YduYcdHpBIqG8uai9xUXIYNoZV1x6oxFhlileaPg=--NC2w1h0YMcb9B5H1oRwviehzw4a7AkXpVeiL0R2PzwA="
+NAME="Moo Shoes is vegan"
+URL="https://mooshoes.com/"
+VEGAN="true"
+SUSTAINABLE="true"
+SLOW="true"
+INDEPENDENT="true"
+NOTES="shoes!"
+
+```
+
+Response:
+
+```md
+HTTP/1.1 201 Created
+Content-Type: application/json; charset=utf-8
+
+{
+  "retailprofile": {
+    "id": 2,
+    "name": "this is a test",
+    "siteUrl": "www.test.com",
+    "notes": "cool shop",
+    "vegan": true,
+    "slow:" false,
+    "sustainable": true,
+    "independent": true
+  }
+}
+```
+#### update /retailprofiles/:id
+
+This update action expects an empty (e.g '' or '{}' if JSON) PATCH to an existing idea.
+
+If the request is successful, the response will have an HTTP Status of 200 OK, and the body will be JSON containing the updated retail profile.
+
+Request:
+
+```sh
+API="${API_ORIGIN:-http://localhost:4741}"
+URL_PATH="/retailprofiles/$ID"
+curl "${API}${URL_PATH}/${ID}" \
+  --include \
+  --request PATCH \
+  --header "Content-Type: application/json" \
+  --header "Authorization: Token token=${TOKEN}" \
+  --data '{
+    "retailprofile": {
+      "name": "'"${NAME}"'",
+      "siteUrl": "'"${URL}"'",
+      "vegan": "'"${VEGAN}"'",
+      "sustainable": "'"${SUSTAINABLE}"'",
+      "slow": "'"${SLOW}"'",
+      "independent": "'"${INDEPENDENT}"'",
+      "notes": "'"${NOTES}"'"
+    }
+  }'
+```
+
+```sh
+TOKEN="dz6YduYcdHpBIqG8uai9xUXIYNoZV1x6oxFhlileaPg=--NC2w1h0YMcb9B5H1oRwviehzw4a7AkXpVeiL0R2PzwA="
+NAME=""
+URL="https://mooshoes.com/"
+VEGAN="true"
+SUSTAINABLE="true"
+SLOW="true"
+INDEPENDENT="true"
+NOTES="shoes!"
+```
+
+Response:
+
+```md
+HTTP/1.1 204 No Content
+```
+#### destroy /retailprofiles/:id
+
+The destroy action is a DELETE request specifing the id of the retail profile to delete. If the request is successful the status will be 204 No Content.
+
+Request:
+
+```sh
+API="http://localhost:4741"
+URL_PATH="/retailprofiles"
+
+curl "${API}${URL_PATH}/${ID}" \
+  --include \
+  --request DELETE \
+  --header "Authorization: Token token=$TOKEN"
+```
+
+```sh
+TOKEN="VmGwZbqcEzjeZdKeUBSSiCPIemDPB4VVZcAWa533en0=--Ptjjc2iypOpWwhJZgDJOywrG1cJl3UmJZQAa9L0jrRw="
+ID="592f1ca4c8a425eda5173fcc"
+```
+
+Response:
+
+```md
+HTTP/1.1 204 No Content
 ```
 
 ## [License](LICENSE)
