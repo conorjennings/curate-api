@@ -10,7 +10,7 @@ const retailprofileSchema = new mongoose.Schema({
   },
   siteUrl: {
     type: String,
-    required: true
+    required: false,
   },
   _owner: {
     type: mongoose.Schema.Types.ObjectId,
